@@ -2,26 +2,24 @@
 session_start(); //needed at start of php
 
 //XAMPP default name is root and no password
-$conn = new PDO ('mysql:host=localhost,dbname=passcheck', 'root', '')
+$conn = new PDO('mysql:host=localhost;dbname=passcheck', 'root', '');
+$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-if (isset($_GET['login'])) //if login submitted
-{
-    $name = $_POST['username'];
+if (isset($_GET['login'])) { //if login submitted
+    $username = $_POST['username'];
     $pass = $_POST['passwd'];
 
-    $statement = $pdo->prepare("SELECT * FROM userinfo WHERE name = ".$name);
-    $result = $statement->execute(array('name' => $name));
-    $user = $statement->fetch();
+    $statement = $conn->prepare("SELECT * FROM userinfo WHERE username = :username");
+    $statement->execute(array('name' => $name));
+    $user = $statement->fetch();  //false if non-existent
 
-     if ($user !== false && password_verify($pass, $user['password'])) {
+    if ($user !== false && password_verify($pass, $user['password'])) {
         die('Login successful!');
-        $message = "Login success"
+        $message = "Login success";
     } else {
         $message = "Username or password is incorrect<br>";
     }
 }
-
-if (isset())
 
 ?>
 

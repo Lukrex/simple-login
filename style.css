@@ -1,0 +1,39 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    font-size: 16px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    width: 20rem;
+}
+
+label {
+    margin-bottom: 0.3rem;
+}
+
+input {
+    margin-bottom: 0.6rem;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#submitBtn {
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#submitBtn:hover {
+    background-color: #45a049;
+}

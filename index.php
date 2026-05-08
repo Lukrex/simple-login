@@ -5,7 +5,7 @@ session_start(); //needed at start of php
 $conn = new PDO('mysql:host=localhost;dbname=passcheck', 'root', '');
 $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-if (isset($_GET['login'])) { //if login submitted
+if (isset($_GET['login']) && $_GET['login']) { //if login submitted
     $username = trim($_POST['username']);
     $pass = trim($_POST['passwd']);
 
@@ -14,11 +14,13 @@ if (isset($_GET['login'])) { //if login submitted
     $user = $statement->fetch();  //false if non-existent
 
     // echo "<pre>"; 
-    // print_r($user); // this shows what the DB found
+    // print_r($user); //this shows what the DB found
     // echo "</pre>";
 
     if ($user !== false && password_verify($pass, $user['password'])) { //password_verify() for password_hash() using BCRYPT
         $message = "Login success<br>";
+    } else if (strlen($pass)<8) {
+        $message = "Entered password is too short<br>";
     } else {
         $message = "Username or password is incorrect<br>";
     }
@@ -37,10 +39,10 @@ if (isset($_GET['login'])) { //if login submitted
 <body>
     <form method="POST" action="?login=1">
         <label for="username">Username: </label>
-        <input name="username" id="username" placeholder="Username">
+        <input name="username" id="username" placeholder="Username" maxlength=64>
 
         <label for="passwd">Password: </label>
-        <input type="password" name="passwd" id="passwd" placeholder="Password">
+        <input type="password" name="passwd" id="passwd" placeholder="Password" maxlength=64>
 
         <input type="submit" id="submitBtn" value="Submit"><br>
         <?php 

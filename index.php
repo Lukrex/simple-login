@@ -6,16 +6,19 @@ $conn = new PDO('mysql:host=localhost;dbname=passcheck', 'root', '');
 $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 if (isset($_GET['login'])) { //if login submitted
-    $username = $_POST['username'];
-    $pass = $_POST['passwd'];
+    $username = trim($_POST['username']);
+    $pass = trim($_POST['passwd']);
 
     $statement = $conn->prepare("SELECT * FROM userinfo WHERE username = :username");
-    $statement->execute(array('name' => $name));
+    $statement->execute(array('username' => $username));
     $user = $statement->fetch();  //false if non-existent
 
-    if ($user !== false && password_verify($pass, $user['password'])) {
-        die('Login successful!');
-        $message = "Login success";
+    // echo "<pre>"; 
+    // print_r($user); // this shows what the DB found
+    // echo "</pre>";
+
+    if ($user !== false && password_verify($pass, $user['password'])) { //password_verify() for password_hash() using BCRYPT
+        $message = "Login success<br>";
     } else {
         $message = "Username or password is incorrect<br>";
     }
@@ -39,10 +42,10 @@ if (isset($_GET['login'])) { //if login submitted
         <label for="passwd">Password: </label>
         <input type="password" name="passwd" id="passwd" placeholder="Password">
 
-        <input type="submit" id="submitBtn" value="Submit">
+        <input type="submit" id="submitBtn" value="Submit"><br>
+        <?php 
+            if(isset($message)) { echo $message; }
+        ?>
     </form>
-    <?php 
-        if(isset($message)) { echo $message; }
-    ?>
 </body>
 </html>

@@ -54,6 +54,9 @@ try {
 
             session_regenerate_id(true); //generates a new random ID
             $_SESSION['user_id'] = $user['id'];
+            // refresh the CSRF token after login
+            $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+
             $message = "Login success<br>";
         } else {
             //insert ip into table if not there, increment attempts if ip there
@@ -81,7 +84,7 @@ try {
 </head>
 <body>
     <form method="POST" action="?login=1">
-        <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token'] ?>">
+        <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8'); ?>">
         <label for="username">Username: </label>
         <input name="username" id="username" placeholder="Username" maxlength=64>
 
